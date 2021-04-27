@@ -43,6 +43,10 @@ func main() {
 		os.Exit(0)
 	}
 
+	if len(regions) == 0 {
+		log.Fatalln("need at least one region")
+	}
+
 	loc, err := time.LoadLocation("Europe/Stockholm")
 	if err != nil {
 		log.Fatalln(err)
