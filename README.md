@@ -14,8 +14,9 @@ energy_price_per_kwh{country="SE",currency="SEK",region="SN4"} 0.4707
 ```
 
 Data is cached for 30min in memory to not hammer Vattenfall each time you
-scrape the collector (and their API is slow), but still catch any price
-adjustments that might occur.
+scrape the collector (and their API is slow). Though energy prices are
+fixed the day before, due to exchange rate fluctuations prices sometimes
+update during the day.
 
 ## Usage
 
