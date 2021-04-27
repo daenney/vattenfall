@@ -45,7 +45,7 @@ func main() {
 
 	loc, err := time.LoadLocation("Europe/Stockholm")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 
 	c := prometheus.NewPedanticRegistry()
@@ -79,7 +79,7 @@ func main() {
 
 		listener, err := net.Listen("tcp", *addr)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
 
 		mux := http.NewServeMux()
@@ -90,7 +90,7 @@ func main() {
 		}
 		go func() {
 			if err := h.Serve(listener); err != http.ErrServerClosed {
-				log.Fatal(err.Error())
+				log.Fatalln(err.Error())
 			}
 		}()
 
