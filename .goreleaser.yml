@@ -1,0 +1,34 @@
+project_name: vattenfall
+builds:
+  - id: vattenfall
+    binary: vattenfall
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    flags:
+      - -trimpath
+    ldflags:
+      - -s
+      - -w
+      - -X main.version={{.Version}} -X main.commit={{.FullCommit}} -X main.date={{.CommitDate}} -X main.repository={{.GitURL}}
+    goos:
+      - windows
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+      - arm
+    goarm:
+      - 7
+archives:
+  - id: vattenfall
+    builds:
+      - vattenfall
+    wrap_in_directory: true
+    files:
+      - LICENSE
+      - README.md
+    replacements:
+      darwin: macOS
+    format_overrides:
+      - goos: windows
+        format: zip
