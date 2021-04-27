@@ -11,7 +11,8 @@ import (
 )
 
 const (
-	source = "https://www.vattenfall.se/api/price/spot/pricearea/%s/%s/%s"
+	source    = "https://www.vattenfall.se/api/price/spot/pricearea/%s/%s/%s"
+	userAgent = "vattenfall-exporter/%s (+https://github.com/daenney/vattenfall)"
 )
 
 type Data struct {
@@ -87,7 +88,15 @@ func fetchFromURL(date time.Time, region string) ([]byte, error) {
 		date.Format("2006-01-02"),
 		region,
 	)
-	resp, err := http.Get(res)
+
+	req, err := http.NewRequest("GET", res, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("User-Agent", fmt.Sprintf(userAgent, version))
+
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch %s: %w", res, err)
 	}
