@@ -98,7 +98,7 @@ func main() {
 			}
 		}()
 
-		log.Printf("exporter listening on: %s", listener.Addr().String())
+		log.Println("exporter listening on:", listener.Addr().String())
 		<-stp
 		h.Shutdown(ctx)
 	}
