@@ -72,10 +72,8 @@ func main() {
 	}
 
 	if *addr != "" {
-		stp := make(chan os.Signal, 1)
-		signal.Notify(stp, os.Interrupt, syscall.SIGTERM)
-		ctx, ctxCancel := context.WithCancel(context.Background())
-		defer ctxCancel()
+		ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+		defer cancel()
 
 		p := prometheus.NewPedanticRegistry()
 		p.MustRegister(prometheus.NewProcessCollector(prometheus.ProcessCollectorOpts{}))
@@ -97,9 +95,14 @@ func main() {
 				log.Fatalln(err.Error())
 			}
 		}()
-
 		log.Println("exporter listening on:", listener.Addr().String())
-		<-stp
-		h.Shutdown(ctx)
+
+		<-ctx.Done()
+
+		t, tc := context.WithTimeout(context.Background(), 5*time.Second)
+		defer tc()
+		h.Shutdown(t)
+
+		log.Println("exporter shutdown completed")
 	}
 }
