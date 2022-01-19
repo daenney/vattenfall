@@ -1,8 +1,9 @@
 # Vattenfall
 
 This is a very basic Prometheus exporter for the Vattenfall electricity spot
-prices in Sweden. It'll export one metric, `energy_price_per_kwh` for each
-region:
+prices in Sweden. You can explore the data on https://www.vattenfall.se/elavtal/elpriser/timpris-pa-elborsen/.
+
+It'll export one metric, `energy_price_per_kwh` for each region:
 
 ```
 # HELP energy_price_per_kwh Energy price per kWh for a region
