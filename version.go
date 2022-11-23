@@ -1,7 +1,9 @@
 package main
 
+const unknown = "unknown"
+
 var (
-	version = "main"
-	commit  = "none"
-	date    = "unknown"
+	version = unknown
+	commit  = unknown
+	date    = unknown
 )
