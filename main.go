@@ -15,6 +15,7 @@ import (
 	_ "time/tzdata"
 
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/collectors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -76,8 +77,8 @@ func main() {
 		defer cancel()
 
 		p := prometheus.NewPedanticRegistry()
-		p.MustRegister(prometheus.NewProcessCollector(prometheus.ProcessCollectorOpts{}))
-		p.MustRegister(prometheus.NewGoCollector())
+		p.MustRegister(collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}))
+		p.MustRegister(collectors.NewGoCollector())
 
 		listener, err := net.Listen("tcp", *addr)
 		if err != nil {

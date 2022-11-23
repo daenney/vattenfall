@@ -3,7 +3,7 @@ module github.com/daenney/vattenfall
 go 1.19
 
 require (
-	github.com/prometheus/client_golang v1.13.0
+	github.com/prometheus/client_golang v1.14.0
 	github.com/prometheus/common v0.37.0
 )
 
