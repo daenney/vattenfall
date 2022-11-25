@@ -88,7 +88,7 @@ func main() {
 		mux := http.NewServeMux()
 		mux.Handle("/metrics", promhttp.HandlerFor(p, promhttp.HandlerOpts{}))
 		mux.Handle("/prices", promhttp.InstrumentMetricHandler(p, promhttp.HandlerFor(c, promhttp.HandlerOpts{})))
-		mux.Handle("/forecast", promhttp.InstrumentMetricHandler(p, http.HandlerFunc(forecastHandler(loc))))
+		mux.Handle("/forecast", promhttp.InstrumentMetricHandler(p, http.HandlerFunc(forecastHandler(loc, regions))))
 		h := &http.Server{
 			Handler: mux,
 		}
