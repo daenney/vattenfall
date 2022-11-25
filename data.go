@@ -85,7 +85,7 @@ func fetchFromURL(date time.Time, region string) ([]byte, error) {
 	res := fmt.Sprintf(
 		source,
 		date.Format("2006-01-02"),
-		date.Format("2006-01-02"),
+		date.AddDate(0, 0, 1).Format("2006-01-02"),
 		region,
 	)
 
