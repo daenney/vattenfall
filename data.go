@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"math"
 	"net/http"
 	"sync"
 	"time"
@@ -48,7 +49,7 @@ func (d *Data) UnmarshalJSON(data []byte) error {
 
 	d.Timestamp = parsed
 	d.Region = v.PriceArea
-	d.Value = (v.Value * 100) / 10000
+	d.Value = math.Round(v.Value*100) / 10000
 	d.Currency = "SEK"
 
 	return nil
