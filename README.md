@@ -50,3 +50,30 @@ Or to just get the values on the console:
 ```sh
 $ vattenfall -region SN1 -region SN2 -region SN3 -region SN4
 ```
+
+## Forecast
+
+At `/forecast` the prices for up to the end of the next day are displayed. The
+JSON on that endpoint can be used with the [Grafana JSON API datasource](https://grafana.com/grafana/plugins/marcusolsson-json-datasource/)
+to display the forecast without having to ingest this data in a separate
+database.
+
+Add a JSON API datasource, name it whatever you want and point it at:
+`http(s):url-of-vattenfall/forecast`. Then, configure a time series panel with
+the new data source and:
+
+* Options:
+  * interval: 1h
+  * relative time: +36h
+* Query:
+  * Fields:
+    * `$.[*].time`, type: Time
+    * `$.[*].value`, type: Number
+    * `$.[*].region`, type: Auto (or String)
+  * Experimental:
+    * Group by: `region`
+    * Metric: `value`
+
+For the graph itself you want:
+* Line interpolation: step after
+* Unit: Swedish Krona (kr)

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"sync"
 	"time"
@@ -115,4 +116,44 @@ func fetchFromURL(date time.Time, region string) ([]byte, error) {
 	}
 
 	return data, nil
+}
+
+// forecastHandler returns JSON in a format compatible with the Grafana JSON-API
+// plugin. This allows you to display the forecast as Prometheus doesn't do values
+// in the future
+func forecastHandler(loc *time.Location) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		query := r.URL.Query()
+		var regs []string
+		if regions, ok := query["region"]; ok {
+			regs = regions
+		} else {
+			regs = []string{"SN1", "SN2", "SN3", "SN4"}
+		}
+		type point struct {
+			Time   time.Time `json:"time"`
+			Region string    `json:"region"`
+			Value  float64   `json:"value"`
+		}
+		res := []point{}
+
+		for _, reg := range regs {
+			now := time.Now().In(loc)
+			data, err := fetch(now, reg)
+			if err != nil {
+				log.Println(err)
+			}
+			for _, entry := range data {
+				if entry.Timestamp.Before(now) {
+					continue
+				}
+				res = append(res, point{Time: entry.Timestamp, Region: entry.Region, Value: entry.Value})
+			}
+		}
+		enc := json.NewEncoder(w)
+		err := enc.Encode(res)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+	}
 }
