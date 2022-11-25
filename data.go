@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"math"
 	"net/http"
@@ -103,7 +102,7 @@ func fetchFromURL(date time.Time, region string) ([]byte, error) {
 		return nil, fmt.Errorf("failed to fetch %s: %w", res, err)
 	}
 	defer func() {
-		io.Copy(ioutil.Discard, resp.Body)
+		io.Copy(io.Discard, resp.Body)
 		resp.Body.Close()
 	}()
 
