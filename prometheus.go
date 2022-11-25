@@ -39,6 +39,9 @@ func (v *vattenfallCollector) Collect(ch chan<- prometheus.Metric) {
 			log.Println(err)
 		}
 		for _, entry := range data {
+			if entry.Timestamp.Day() != now.Day() {
+				continue
+			}
 			if entry.Timestamp.Hour() == now.Hour() {
 				ch <- prometheus.MustNewConstMetric(v.prices,
 					prometheus.GaugeValue, entry.Value, entry.Region)
