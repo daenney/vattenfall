@@ -16,28 +16,29 @@ jobs:
       DOCKER_CLI_EXPERIMENTAL: "enabled"
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v2
+      uses: docker/setup-qemu-action@v3
       with:
         platforms: arm64,arm
     - name: Setup Go
-      uses: actions/setup-go@v3
+      uses: actions/setup-go@v5
       with:
-        go-version: '~1.19'
+        go-version-file: go.mod
+        check-latest: true
     - name: Login to GitHub Container Registry
-      uses: docker/login-action@v2
+      uses: docker/login-action@v3
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Run GoReleaser
-      uses: goreleaser/goreleaser-action@v3
+      uses: goreleaser/goreleaser-action@v5
       with:
         version: latest
-        args: release --rm-dist
+        args: release --clean
       env:
         REGISTRY: ghcr.io
         IMAGE_NAME: daenney/vattenfall

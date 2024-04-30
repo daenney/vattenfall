@@ -27,8 +27,6 @@ archives:
     files:
       - LICENSE
       - README.md
-    replacements:
-      darwin: macOS
     format_overrides:
       - goos: windows
         format: zip
